@@ -12,8 +12,8 @@ public enum BGM
 {
     Main = 0,
     Prologue = 1,
-    Outside = 2,
-    Inside = 3,
+    OutSide = 2,
+    InSide = 3,
     Ending = 4
     
 }
@@ -35,8 +35,7 @@ public enum SFX
 {
     UI = 0,
     SceneChange = 1,
-    Jump = 2,
-    Clear = 3
+    Save = 2,
 }
 
 public class SoundManager : MonoBehaviour
@@ -218,9 +217,10 @@ public class SoundManager : MonoBehaviour
     {
         if (sfxPlayer.volume > 0) // 음소거 시 재생하지 않음
         {
-            // Debug.Log(sfx + " played");
+            if (sfxPlayer.isPlaying) sfxPlayer.Stop();
+
             sfxPlayer.clip = sfxList[(int)sfx];
-            sfxPlayer.PlayOneShot(sfxPlayer.clip);
+            sfxPlayer.Play(); // 바로 교체 재생
         }
     }
 
