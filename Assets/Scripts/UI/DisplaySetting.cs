@@ -127,7 +127,7 @@ public class DisplaySetting : MonoBehaviour
 
     public void OnClick()
     {
-        // SoundManager.Instance.PlaySFX(SFX.UI);
+        SoundManager.Instance.PlaySFX(SFX.UI);
         
         int index = (int)m_resolution;
         if (index < 4)
