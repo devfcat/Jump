@@ -5,33 +5,47 @@ public class ArrowIndicator : MonoBehaviour, ISelectHandler, IDeselectHandler
 {
     public GameObject arrow;
 
-    private bool initialized = false;
+    private bool hasInitialized = false; // 사용자가 조작했는지 여부
 
     void Start()
     {
-        arrow = transform.GetChild(0).gameObject;
-
-        // OnSelect는 Start 이후 호출될 수 있으므로, 한 프레임 뒤에 초기화
-        StartCoroutine(EnableAfterFrame());
+        arrow = this.transform.GetChild(0).gameObject;
     }
 
-    System.Collections.IEnumerator EnableAfterFrame()
+    void OnEnable()
     {
-        yield return null; // 한 프레임 기다림
-        initialized = true;
+        if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == gameObject)
+        {
+            arrow.SetActive(true);
+        }
+
+        // 1프레임 뒤부터 사운드 재생 허용
+        StartCoroutine(EnableSoundNextFrame());
+    }
+
+    void OnDisable()
+    {
+        arrow.SetActive(false);
     }
 
     public void OnSelect(BaseEventData eventData)
     {
-        if (!initialized) return;
         arrow.SetActive(true);
+
+        if (!hasInitialized)
+            return;
+
         SoundManager.Instance.PlaySFX(SFX.UI);
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
-        if (!initialized) return;
         arrow.SetActive(false);
     }
-}
 
+    System.Collections.IEnumerator EnableSoundNextFrame()
+    {
+        yield return null;
+        hasInitialized = true;
+    }
+}
