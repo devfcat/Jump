@@ -13,6 +13,8 @@ public class Manager_OutSide : MonoBehaviour
     void Start()
     {
         SoundManager.Instance.PlayBGM(BGM.OutSide);
+        // 명시적 상태 고침
+        GameManager.Instance.SetState(eState.OutSide);
         SetGameInit();
     }
 

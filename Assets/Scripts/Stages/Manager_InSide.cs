@@ -16,6 +16,8 @@ public class Manager_InSide : MonoBehaviour
     void Start()
     {
         SoundManager.Instance.PlayBGM(BGM.InSide);
+        // 명시적 상태 고침
+        GameManager.Instance.SetState(eState.InSide);
         SetGameInit();
     }
 
