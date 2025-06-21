@@ -23,11 +23,18 @@ public class Player : MonoBehaviour
     [Header("Audio")]
     public AudioClip[] footstepSounds;
     private AudioSource audioSource;
+    
+    private float spawnTime;
 
     void Start()
     {
+        spawnTime = Time.time;
         rb = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
+
+        // 물리 상태 초기화
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f;
     }
 
     void Update()
@@ -65,9 +72,18 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        float elapsed = Time.time - spawnTime;
+        
         wasGroundedLastFrame = isGrounded;
-        // 땅에 닿았는지 확인
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
+
+        if (elapsed > 0.2f) // 씬 시작 0.2초 후부터 체크
+        {
+            isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
+        }
+        else
+        {
+            isGrounded = false; // 임의로 false 처리
+        }
 
         // 회전 속도 제한 (공중에서 너무 빠르게 회전하지 않도록)
         rb.angularVelocity = Mathf.Clamp(rb.angularVelocity, -maxRotationSpeed, maxRotationSpeed);
